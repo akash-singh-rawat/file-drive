@@ -34,7 +34,7 @@ export function FileCardActions({
   file,
   isFavorited,
 }: {
-  file: Doc<"files"> & { url: string | null };
+  file: Doc<"files">;
   isFavorited: boolean;
 }) {
   const deleteFile = useMutation(api.files.deleteFile);
@@ -83,8 +83,7 @@ export function FileCardActions({
         <DropdownMenuContent>
           <DropdownMenuItem
             onClick={() => {
-              if (!file.url) return;
-              window.open(file.url, "_blank");
+              window.open(getFileUrl(file.fileId), "_blank");
             }}
             className="flex gap-1 items-center cursor-pointer"
           >
@@ -148,4 +147,8 @@ export function FileCardActions({
       </DropdownMenu>
     </>
   );
+}
+
+export function getFileUrl(fileId: Id<"_storage">): string {
+  return `${process.env.NEXT_PUBLIC_CONVEX_URL}/api/storage/${fileId}`;
 }
